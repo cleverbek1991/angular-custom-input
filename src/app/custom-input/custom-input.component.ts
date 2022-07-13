@@ -17,7 +17,7 @@ import {
   <ng-container [formGroup]="customInputForm">
     <div class="row">
       <label for="cnumberid"> Number Input </label>
-        <input id="cnumberid" type="number" formControlName="cnumber">
+        <input id="cnumberid" type="text" formControlName="cnumber" (keydown)="checkForCharacter($event)">
     </div>
   </ng-container>
   `,
@@ -38,24 +38,28 @@ import {
 export class CustomInputComponent
   implements OnInit, ControlValueAccessor, Validator
 {
-  public customInputForm: FormGroup = new FormGroup({
+  customInputForm: FormGroup = new FormGroup({
     cnumber: new FormControl('', [Validators.required]),
   });
   constructor() {}
 
   ngOnInit() {}
 
-  public onTouched: () => void = () => {};
+  checkForCharacter(event: Event) {
+    console.log(event);
+  }
+
+  onTouched: () => void = () => {};
 
   writeValue(val: any): void {
     val && this.customInputForm.setValue(val, { emitEvent: false });
   }
   registerOnChange(fn: any): void {
-    console.log('on change');
+    // console.log('on change');
     this.customInputForm.valueChanges.subscribe(fn);
   }
   registerOnTouched(fn: any): void {
-    console.log('on blur');
+    // console.log('on blur');
     this.onTouched = fn;
   }
   setDisabledState?(isDisabled: boolean): void {
@@ -63,7 +67,7 @@ export class CustomInputComponent
   }
 
   validate(c: AbstractControl): ValidationErrors | null {
-    console.log('Custom Input validation', c);
+    // console.log('Custom Input validation', c);
     return this.customInputForm.valid
       ? null
       : {
