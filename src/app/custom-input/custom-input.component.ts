@@ -11,13 +11,15 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 
+import { startWith, pairwise } from 'rxjs/operators';
+
 @Component({
   selector: 'custom-input',
   template: `
   <ng-container [formGroup]="customInputForm">
     <div class="row">
       <label for="cnumberid"> Number Input </label>
-        <input id="cnumberid" type="text" formControlName="cnumber" (keydown)="checkForCharacter($event)">
+        <input id="cnumberid" type="text" formControlName="cnumber">
     </div>
   </ng-container>
   `,
@@ -43,10 +45,15 @@ export class CustomInputComponent
   });
   constructor() {}
 
-  ngOnInit() {}
-
-  checkForCharacter(event: Event) {
-    console.log(event);
+  ngOnInit() {
+    this.customInputForm
+      .get('cnumber')
+      .valueChanges.pipe(startWith(null), pairwise())
+      .subscribe(([prev, next]: [any, any]) => {
+        if (isNaN(+next)) {
+          this.customInputForm.setValue({ cnumber: prev });
+        }
+      });
   }
 
   onTouched: () => void = () => {};
