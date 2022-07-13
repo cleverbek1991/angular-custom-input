@@ -10,6 +10,7 @@ export class AppComponent {
   public nestedForm: FormGroup = new FormGroup({
     cinput: new FormControl(''),
     currencyInput: new FormControl(''),
+    pInput: new FormControl(''),
   });
   constructor() {}
 
