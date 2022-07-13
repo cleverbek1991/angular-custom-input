@@ -17,7 +17,7 @@ import {
   <ng-container [formGroup]="customInputForm">
     <div class="row">
       <label for="cnumberid"> Number Input </label>
-        <input id="cnumberid" type="text" formControlName="cnumber" (keydown)="checkForCharacter($event)">
+        <input id="cnumberid" type="number" formControlName="cnumber">
     </div>
   </ng-container>
   `,
@@ -45,9 +45,13 @@ export class CustomInputComponent
 
   ngOnInit() {}
 
-  checkForCharacter(event: Event) {
-    console.log(event);
-  }
+  // checkForCharacter(event: KeyboardEvent) {
+  //   const charCode = (event.which) ? event.which : event.keyCode;
+  //   if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+  //      return false;
+  //   }
+  //   return true;
+  // }
 
   onTouched: () => void = () => {};
 
@@ -55,11 +59,9 @@ export class CustomInputComponent
     val && this.customInputForm.setValue(val, { emitEvent: false });
   }
   registerOnChange(fn: any): void {
-    // console.log('on change');
     this.customInputForm.valueChanges.subscribe(fn);
   }
   registerOnTouched(fn: any): void {
-    // console.log('on blur');
     this.onTouched = fn;
   }
   setDisabledState?(isDisabled: boolean): void {
@@ -67,7 +69,6 @@ export class CustomInputComponent
   }
 
   validate(c: AbstractControl): ValidationErrors | null {
-    // console.log('Custom Input validation', c);
     return this.customInputForm.valid
       ? null
       : {
