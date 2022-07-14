@@ -1,6 +1,8 @@
 <form [formGroup]="nestedForm" (ngSubmit)="onSubmit()">
   <custom-input formControlName="cinput"></custom-input>
+  <currency-input formControlName="currencyInput"></currency-input>
+  <p-input formControlName="pInput"></p-input>
 </form>
 
 <p>{{ nestedForm.value | json }}</p>
-<p>{{ nestedForm.valid }}</p>
+<p>{{ nestedForm.valid | json }}</p>

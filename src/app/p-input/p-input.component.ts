@@ -14,45 +14,45 @@ import {
 import { startWith, pairwise } from 'rxjs/operators';
 
 @Component({
-  selector: 'custom-input',
+  selector: 'p-input',
   template: `
-  <ng-container [formGroup]="customInputForm">
+  <ng-container [formGroup]="pInputForm">
     <div class="row">
-      <label for="cnumberid"> Number Input </label>
-        <input id="cnumberid" type="text" formControlName="cnumber">
+      <label for="pnumberid"> Percentage Input </label>
+        <input id="pnumberid" type="text" formControlName="pnumber">
     </div>
   </ng-container>
   `,
-  styleUrls: ['./custom-input.component.css'],
+  styleUrls: ['./p-input.component.css'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => CustomInputComponent),
+      useExisting: forwardRef(() => PercentageInputComponent),
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => CustomInputComponent),
+      useExisting: forwardRef(() => PercentageInputComponent),
       multi: true,
     },
   ],
 })
-export class CustomInputComponent
+export class PercentageInputComponent
   implements OnInit, ControlValueAccessor, Validator
 {
-  customInputForm: FormGroup = new FormGroup({
-    cnumber: new FormControl('', [Validators.required]),
+  pInputForm: FormGroup = new FormGroup({
+    pnumber: new FormControl('', [Validators.required]),
   });
   constructor() {}
 
   ngOnInit() {
-    this.customInputForm
-      .get('cnumber')
+    this.pInputForm
+      .get('pnumber')
       .valueChanges.pipe(startWith(null), pairwise())
       .subscribe(([prev, next]: [any, any]) => {
         if (next) {
-          if (isNaN(+next) || next[next.length - 1] === ' ') {
-            this.customInputForm.setValue({ cnumber: prev });
+          if (isNaN(+next) || next[next.length - 1] === '.' || next[next.length - 1] === ' ') {
+            this.pInputForm.setValue({ pnumber: prev });
           }
         }
       });
@@ -61,28 +61,28 @@ export class CustomInputComponent
   onTouched: () => void = () => {};
 
   writeValue(val: any): void {
-    val && this.customInputForm.setValue(val, { emitEvent: false });
+    val && this.pInputForm.setValue(val, { emitEvent: false });
   }
   registerOnChange(fn: any): void {
     // console.log('on change');
-    this.customInputForm.valueChanges.subscribe(fn);
+    this.pInputForm.valueChanges.subscribe(fn);
   }
   registerOnTouched(fn: any): void {
     // console.log('on blur');
     this.onTouched = fn;
   }
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.customInputForm.disable() : this.customInputForm.enable();
+    isDisabled ? this.pInputForm.disable() : this.pInputForm.enable();
   }
 
   validate(c: AbstractControl): ValidationErrors | null {
     // console.log('Custom Input validation', c);
-    return this.customInputForm.valid
+    return this.pInputForm.valid
       ? null
       : {
           invalidForm: {
             valid: false,
-            message: 'customInputForm fields are invalid',
+            message: 'pInputForm fields are invalid',
           },
         };
   }
