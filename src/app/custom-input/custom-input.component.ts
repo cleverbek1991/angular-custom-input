@@ -50,8 +50,10 @@ export class CustomInputComponent
       .get('cnumber')
       .valueChanges.pipe(startWith(null), pairwise())
       .subscribe(([prev, next]: [any, any]) => {
-        if (isNaN(+next)) {
-          this.customInputForm.setValue({ cnumber: prev });
+        if (next) {
+          if (isNaN(+next) || next[next.length - 1] === ' ') {
+            this.customInputForm.setValue({ cnumber: prev });
+          }
         }
       });
   }

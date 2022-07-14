@@ -50,8 +50,10 @@ export class PercentageInputComponent
       .get('pnumber')
       .valueChanges.pipe(startWith(null), pairwise())
       .subscribe(([prev, next]: [any, any]) => {
-        if (isNaN(+next)) {
-          this.pInputForm.setValue({ pnumber: prev });
+        if (next) {
+          if (isNaN(+next) || next[next.length - 1] === '.' || next[next.length - 1] === ' ') {
+            this.pInputForm.setValue({ pnumber: prev });
+          }
         }
       });
   }
